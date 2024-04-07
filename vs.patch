@@ -1,0 +1,39 @@
+--- wine-git/PKGBUILD
++++ wine-git/PKGBUILD
+@@ -88,4 +88,36 @@
+ prepare() {
+     rm -rf build-{32,64}
+     mkdir -p build-{32,64}
++
++    echo "Patching for VS2019 (0/5)"
++    cd "${srcdir}/wine"
++
++    echo "Fetching RegLoadAppKey Patch (1/5)"
++    wget -q -O - "https://bugs.winehq.org/attachment.cgi?id=65561" > "${srcdir}/wine/regloadappkeypatch"
++    echo "Applying RegLoadAppKey Patch (1/5)"
++    patch -s -p1 < "${srcdir}/wine/regloadappkeypatch"
++
++    echo "Fetching actctx assembly->dir Patch (2/5)"
++    wget -q  -O - "https://bugs.winehq.org/attachment.cgi?id=71911" > "${srcdir}/wine/actctxpatch"
++    echo "Applying RegLoadAppKey Patch (2/5)"
++    patch -s -p1 < "${srcdir}/wine/actctxpatch"
++
++    echo "Skipping IROT Patch (3/5)"
++    #echo "Fetching IROT Patch (3/5)"
++    #wget -q  -O - "https://bugs.winehq.org/attachment.cgi?id=74525" > "${srcdir}/wine/irotpatch"
++    #echo "Applying IROT Patch (3/5)"
++    #patch -s -p1 < "${srcdir}/wine/irotpatch"
++
++    echo "Fetching PerfSetULongCounterValue Patch (4/5)"
++    wget -q  -O - "https://bugs.winehq.org/attachment.cgi?id=74527" > "${srcdir}/wine/ulongpatch"
++    echo "Applying PerfSetULongCounterValue Patch (4/5)"
++    patch -s -p1 < "${srcdir}/wine/ulongpatch"
++
++    echo "Fetching SHAssocEnumHandlersForProtocolByApplication Patch (5/5)"
++    wget -q  -O - "https://bugs.winehq.org/attachment.cgi?id=74775" > "${srcdir}/wine/shassocpatch"
++    echo "Applying SHAssocEnumHandlersForProtocolByApplication Patch (5/5)"
++    patch -s -p1 < "${srcdir}/wine/shassocpatch"
++
++    cd "${srcdir}"
++    echo "Applied VS2019 Patches (5/5)"
+ }
