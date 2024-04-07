@@ -116,3 +116,9 @@ Now run `WINEDEBUG=+relay WINEPREFIX="$HOME/VS2019/" wine ~/VS2019/drive_c/Progr
 After clicking sign in, open `vs.log` and search for any instance of `url.dll` or `url` being listed, one of these should contain the Github sign in link that you can then use to sign in!
 
 Congratulations, you should now be signed in. You can view your repositories (public and private), but cannot clone them due to an authorisation issue caused by Cygwin. Manual authorisation also does not work as password authentication was disabled in 2021. Therefore, you also cannot pull, push or fetch. But, with the amount of warnings and disclaimers on the [Wine Cygwin and More page](https://wiki.winehq.org/Cygwin_and_More), I figure that this is probably a fix best left to someone else.
+
+### Cannot debug programs
+Debugging is currently not possible with VS2019 on wine. 
+
+### Icon or Smallicon missing warning
+As far as I can tell, this warning appears when you try to use a VS feature not currently supported by wine. Bug reports only currently refer to installing/starting Visual Studio, not getting various features of it working.
