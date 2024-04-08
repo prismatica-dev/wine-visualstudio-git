@@ -31,10 +31,11 @@ WINEPREFIX="$HOME/VS2019/" wineboot
 ```
 WINEPREFIX="$HOME/VS2019/" winetricks -q arial d3dcompiler_47 gdiplus
 WINEPREFIX="$HOME/VS2019/" winetricks msxml6
-WINEPREFIX="$HOME/VS2019/" winetricks dotnet48 dotnet7 dotnetdesktop7 # Replace these with the versions of .NET you wish to install.
+WINEPREFIX="$HOME/VS2019/" winetricks dotnet48 # Replace this with the version(s) of .NET you wish to install.
 WINEPREFIX="$HOME/VS2019/" winetricks vstools2019
 ```
 **IMPORTANT:** You will now see the Visual Studio Installer GUI. The current prompt will install Visual Studio 2019 Build Tools, select the components you want and install. This may produce errors, but they should not prevent you from running VS2019.
+**IMPORTANT:** .NET Framework 4.8.1 cannot currently be installed through winetricks.
 
 ### Installing Visual Studio 2019
 This method is used to run the old installer gui as the current no longer lists VS2019 releases.
@@ -73,19 +74,22 @@ yay -S ttf-ms-win10-auto
 Other fixes can be found on the [Arch Linux Wiki](https://wiki.archlinux.org/title/Wine#Fonts), personally I used the `FREETYPE_PROPERTIES="truetype:interpreter-version=35"` environment variable for starting devenv.exe, and enabled fontsmoothing.
 
 #### Disabling Hardware Acceleration
-This can be done in VS2019 itself, under "Tools" -> "Options" -> ”Environment” -> ”General” -> Disable "Automatically adjust visual experience based on client performance", "Use hardware graphics acceleration if available". From testing, "Enable rich client visual experience" does not have any negative impact and can be left enabled.
+This can be done in VS2019 itself, under "Tools" -> "Options" -> ”Environment” -> ”General” -> Disable "Automatically adjust visual experience based on client performance" and "Use hardware graphics acceleration if available". **NOTE:** From testing, "Enable rich client visual experience" does not have any negative impact and can be left enabled.
 
 However, due to Hardware Acceleration the options menu ***may not render at all***, preventing itself from being disabled. 
 In this case, running with the environment variable `LIBGL_ALWAYS_SOFTWARE=1` should change it to Software Acceleration.
 
-Alternatively, you can change the renderer with winetricks, which in my case did not change the renderer and instead switched VS2019 to using Software Acceleration automatically.
+Alternatively, you can change the renderer with winetricks, which in my case did not change the renderer and instead switched VS2019 to using Software Acceleration automatically (at the cost of wine creating a warning popup).
 ```
 WINEPREFIX="$HOME/VS2019/" winetricks
 ```
 Select the default wineprefix -> Change settings -> Enable `Renderer=vulkan`
 
 ### Running Visual Studio 2019
-Visual Studio's devenv.exe should now run using wine under the new prefix, `WINEPREFIX="$HOME/VS2019/" wine ~/VS2019/drive_c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/Common7/IDE/devenv.exe`.
+Visual Studio's devenv.exe should now run using wine under the new prefix,
+```
+WINEPREFIX="$HOME/VS2019/" wine ~/VS2019/drive_c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2019/Community/Common7/IDE/devenv.exe
+```
 Alternatively, if it does not open, or closes immediately, appending `/resetsettings` or `/setup` to the end of the command can allow it to run.
 
 ## Troubleshooting
@@ -102,7 +106,7 @@ If VS still will not start, try deleting the prefix and repeating the installati
 Refer to [this comment](https://bugs.winehq.org/show_bug.cgi?id=48023#c30) for a fix.
 
 #### Cannot sign into Github
-**IMPORTANT:** You will still not be able to pull/push repositories once signed in due to a Cygwin issue, this is here purely if someone more knowledgeable than me wants to try and get it working.
+**IMPORTANT:** You will still not be able to clone, pull or push repositories once signed in due to a Cygwin issue, this is here purely if someone more knowledgeable than me wants to try and get it working.
 
 Due to an issue with url.dll, the sign-in link will not open in either an embedded browser or the system web browser. You will have to get the github sign-in URL using `WINEDEBUG=+relay` environment variable. 
 Go to "Tools" -> "Options" -> "Environment" -> "Accounts" and change "Embedded Browser" to "System Web Browser". Additionally enable the Github Enterprise sign-in option (even if you don't have an Enterprise account, this makes it easier to figure out if the OpenUrl request has been triggered).
@@ -118,7 +122,7 @@ After clicking sign in, open `vs.log` and search for any instance of `url.dll` o
 Congratulations, you should now be signed in. You can view your repositories (public and private), but cannot clone them due to an authorisation issue caused by Cygwin. Manual authorisation also does not work as password authentication was disabled in 2021. Therefore, you also cannot pull, push or fetch. But, with the amount of warnings and disclaimers on the [Wine Cygwin and More page](https://wiki.winehq.org/Cygwin_and_More), I figure that this is probably a fix best left to someone else.
 
 ### Cannot debug programs
-Debugging is currently not possible with VS2019 on wine. 
+Debugging .NET programs is currently not possible with VS2019 on wine.
 
 ### Icon or Smallicon missing warning
 As far as I can tell, this warning appears when you try to use a VS feature not currently supported by wine. Bug reports only currently refer to installing/starting Visual Studio, not getting various features of it working.
