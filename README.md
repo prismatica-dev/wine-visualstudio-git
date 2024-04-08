@@ -35,6 +35,7 @@ WINEPREFIX="$HOME/VS2019/" winetricks dotnet48 # Replace this with the version(s
 WINEPREFIX="$HOME/VS2019/" winetricks vstools2019
 ```
 **IMPORTANT:** You will now see the Visual Studio Installer GUI. The current prompt will install Visual Studio 2019 Build Tools, select the components you want and install. This may produce errors, but they should not prevent you from running VS2019.
+
 **IMPORTANT:** .NET Framework 4.8.1 cannot currently be installed through winetricks.
 
 ### Installing Visual Studio 2019
